@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BsEmojiSmileFill } from "react-icons/bs";
-import { IoMdSend,IoMdAttach } from "react-icons/io";
+import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
 import "./chatinput.css"
@@ -21,15 +21,10 @@ export default function ChatInput({ handleSendMsg }) {
   const sendChat = (event) => {
     event.preventDefault();
     if (msg.length > 0) {
-      let x=new Date();
+      let x = new Date();
       let da = x.toString();
-      da=da.split('GMT',2)[0]
-
-      // console.log((da))
-     
-     
-
-      let msg2=msg+"*"+da;
+      da = da.split('GMT', 2)[0]
+      let msg2 = msg + "*" + da;
       handleSendMsg(msg2);
       setMsg("");
     }
@@ -46,25 +41,16 @@ export default function ChatInput({ handleSendMsg }) {
       <form className="input-container" onSubmit={(event) => sendChat(event)}>
         <input
           type="text"
-          placeholder="type your message here"
+          placeholder="Type your message here"
           onChange={(e) => setMsg(e.target.value)}
-          
           value={msg}
-          
         />
+
         <button type="submit">
           <IoMdSend />
         </button>
       </form>
-      
-       
-      <label class="file-uplode" title="send file">
-    <input type="file" />
-
-    <IoMdAttach/>
-     </label>
-
-    
+  
     </Container>
   );
 }
@@ -72,9 +58,9 @@ export default function ChatInput({ handleSendMsg }) {
 const Container = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 5% 90% 5%;
+  grid-template-columns: 5% 95%;
   background-color: #080420;
-  padding: 0 2rem;
+  padding: 0 1rem;
   @media screen and (min-width: 720px) and (max-width: 1080px) {
     padding: 0 1rem;
     gap: 1rem;

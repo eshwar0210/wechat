@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 import "./chatmsg.css"
-
+import { IoMdAttach } from "react-icons/io";
 export default function ChatContainer({ currentchat, socket }) {
   // state variables
   const [messages, setMessages] = useState([]);
@@ -13,16 +13,17 @@ export default function ChatContainer({ currentchat, socket }) {
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
   // fill the messages array
-  useEffect( () => {
-    async function fetch(){
-    const data = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-    );
-    const response = await axios.post(recieveMessageRoute, {
-      from: data._id,
-      to: currentchat._id,
-    });
-    setMessages(response.data);}
+  useEffect(() => {
+    async function fetch() {
+      const data = await JSON.parse(
+        localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+      );
+      const response = await axios.post(recieveMessageRoute, {
+        from: data._id,
+        to: currentchat._id,
+      });
+      setMessages(response.data);
+    }
     fetch();
   }, [currentchat]);
 
@@ -53,12 +54,21 @@ export default function ChatContainer({ currentchat, socket }) {
   };
 
   useEffect(() => {
+    const handleMessageReceive = (msg) => {
+      setArrivalMessage({ fromSelf: false, message: msg });
+    };
+  
     if (socket.current) {
-      socket.current.on("msg-recieve", (msg) => {
-        setArrivalMessage({ fromSelf: false, message: msg });
-      });
+      socket.current.on("msg-recieve", handleMessageReceive);
     }
-  });
+  
+    return () => {
+      if (socket.current) {
+        socket.current.off("msg-recieve", handleMessageReceive); // Cleanup
+      }
+    };
+  }, [socket]);
+  
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
@@ -88,23 +98,29 @@ export default function ChatContainer({ currentchat, socket }) {
           return (
             <div ref={scrollRef} key={uuidv4()}>
               <div
-                className={`message ${
-                  message.fromSelf ? "sended" : "recieved"
-                }`}
+                className={`message ${message.fromSelf ? "sended" : "recieved"
+                  }`}
               >
                 <div className="content ">
-                  <p>{message.message.split('*',2)[0]}</p>
-                  
-                <p className="time"> { (message.message.split('*',2)[1])}</p>
-                </div>
-                
+                  <p>{message.message.split('*', 2)[0]}</p>
 
+                  <p className="time"> {(message.message.split('*', 2)[1])}</p>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
-      <ChatInput handleSendMsg={handleSendMsg} />
+      <div className="chat-container">
+        <div className="input-container">
+        <ChatInput handleSendMsg={handleSendMsg} />
+        </div>  
+        <label class="file-upload" title="send file">
+          <input type="file" />
+          <IoMdAttach />
+        </label>
+      </div>
+
     </Container>
   );
 }
@@ -182,4 +198,29 @@ const Container = styled.div`
       }
     }
   }
+    .chat-container {
+  display: flex;
+  justify-content: space-between; /* Aligns items to the left and right */
+  align-items: center; /* Vertically centers the items */
+  width: 100%;
+}
+  .chat-container .input-container {
+  flex-grow: 1; /* Chat input takes up remaining space */
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.file-upload input {
+  display: none; /* Hide the default file input */
+}
+
+.file-upload svg {
+  font-size: 1.8rem;
+  color: white;
+}
+
 `;
