@@ -7,9 +7,12 @@ import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 import "./chatmsg.css"
 
 export default function ChatContainer({ currentchat, socket }) {
+  // state variables
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
+
+  // fill the messages array
   useEffect( () => {
     async function fetch(){
     const data = await JSON.parse(
@@ -23,35 +26,28 @@ export default function ChatContainer({ currentchat, socket }) {
     fetch();
   }, [currentchat]);
 
-  useEffect(() => {
-    const getCurrentchat = async () => {
-      if (currentchat) {
-        await JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-        )._id;
-      }
-    };
-    getCurrentchat();
-  }, [currentchat]);
-
+  // sending message
   const handleSendMsg = async (msg) => {
-
     const data = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
+    // emit socket event
     socket.current.emit("send-msg", {
       to: currentchat._id,
       from: data._id,
       msg,
     });
+    // post through api request
     await axios.post(sendMessageRoute, {
       from: data._id,
       to: currentchat._id,
       message: msg,
     });
-
+    // use spread operator to update messages
     const msgs = [...messages];
+    // new message at end
     msgs.push({ fromSelf: true, message: msg });
+    // update state variale of messages
     setMessages(msgs);
 
   };
@@ -62,7 +58,7 @@ export default function ChatContainer({ currentchat, socket }) {
         setArrivalMessage({ fromSelf: false, message: msg });
       });
     }
-  }, []);
+  });
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
@@ -122,8 +118,8 @@ const Container = styled.div`
     grid-template-rows: 15% 70% 15%;
   }
   .chat-header {
-
     display: flex;
+    height: 95px;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
