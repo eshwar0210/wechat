@@ -7,14 +7,13 @@ const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 
+const path = require('path');
+
 app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("DB Connetion Successfull");
   })
@@ -25,15 +24,18 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
+// Serve the static files from the React build folder
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
 );
-const io = socket(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    credentials: true,
-  },
-});
+const io = socket(server);
 
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
