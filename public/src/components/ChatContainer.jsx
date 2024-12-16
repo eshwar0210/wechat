@@ -1,28 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ChatInput from "./ChatInput";
-import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
 import "./chatmsg.css"
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
-TimeAgo.addDefaultLocale(en)
-
-// Create formatter (English).
-const timeAgo = new TimeAgo('en-US')
-
-
 
 export default function ChatContainer({ currentchat, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
   const [arrivalMessage, setArrivalMessage] = useState(null);
-
-
- 
-
   useEffect( () => {
     async function fetch(){
     const data = await JSON.parse(
@@ -67,8 +54,6 @@ export default function ChatContainer({ currentchat, socket }) {
     msgs.push({ fromSelf: true, message: msg });
     setMessages(msgs);
 
-
-
   };
 
   useEffect(() => {
@@ -101,12 +86,8 @@ export default function ChatContainer({ currentchat, socket }) {
             <h3>{currentchat.username}</h3>
           </div>
         </div>
-        {/* <Logout /> */}
       </div>
       <div className="chat-messages" >
-      
-   
-  
         {messages.map((message) => {
           return (
             <div ref={scrollRef} key={uuidv4()}>
@@ -149,7 +130,7 @@ const Container = styled.div`
     .user-details {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 2rem;
       .avatar {
         img {
           height: 3rem;

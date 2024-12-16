@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo2.png";
 import Logout from "./Logout";
 import "./chatmsg.css"
 export default function Contacts({ contacts, changechat }) {
@@ -9,17 +9,13 @@ export default function Contacts({ contacts, changechat }) {
   const [currentSelected, setCurrentSelected] = useState(undefined);
   useEffect( () => {
     async function fetch(){
-     
-
     const data = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
     setCurrentUserName(data.username);
     setCurrentUserImage(data.avatarImage);
-
     }
     fetch();
-
   }, []);
   const changeCurrentchat = (index, contact) => {
     setCurrentSelected(index);
@@ -31,7 +27,7 @@ export default function Contacts({ contacts, changechat }) {
         <Container>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h3>chat</h3>
+            <h3>We Chat</h3>
           </div>
           <div className="contacts">
             {contacts.map((contact, index) => {
@@ -79,10 +75,9 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 10% 80% 10%;
   overflow: hidden;
-  background-color: #080420;
+  background-color: #082920;
   .brand {
-    background-color: rgb(39, 84, 93);
-
+    background-color: rgb(45, 84, 93);
     display: flex;
     align-items: center;
     gap: 1rem;

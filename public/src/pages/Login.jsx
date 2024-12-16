@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo2.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { loginRoute } from "../utils/APIRoutes";
-// import "./register.css"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,10 +30,10 @@ export default function Login() {
   const validateForm = () => {
     const { username, password } = values;
     if (username === "") {
-      toast.error("Email and Password is required.", toastOptions);
+      toast.error("Username is required.", toastOptions);
       return false;
     } else if (password === "") {
-      toast.error("Email and Password is required.", toastOptions);
+      toast.error("Password is required.", toastOptions);
       return false;
     }
     return true;
@@ -68,7 +67,7 @@ export default function Login() {
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h1>chat</h1>
+            <h1>We chat</h1>
           </div>
           <input
             type="text"
@@ -102,8 +101,7 @@ flex-direction: column;
 justify-content: center;
 gap: rem;
 align-items: center;
-background-color: #131324;
-background-image: url(./chat.jpg);
+background-color: #133333;
 background-repeat: no-repeat;
 background-attachment: fixed;
 background-size: 100% 100%;

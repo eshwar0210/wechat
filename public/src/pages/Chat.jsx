@@ -16,8 +16,6 @@ export default function Chat() {
   const [currentUser, setCurrentUser] = useState(undefined);
   useEffect( () => {
     async function fetch(){
-
-
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/login");
     } else {
@@ -28,8 +26,6 @@ export default function Chat() {
       );
     }}
     fetch();
-
-
   }, []);
   useEffect(() => {
     if (currentUser) {
@@ -40,7 +36,6 @@ export default function Chat() {
 
   useEffect( () => {
     async function fetch(){
-
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
         const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
@@ -51,7 +46,6 @@ export default function Chat() {
     }
   }
   fetch();
-
   }, [currentUser]);
   const handlechatChange = (chat) => {
     setCurrentchat(chat);
@@ -80,7 +74,7 @@ const Container = styled.div`
   justify-content: center;
   gap: 1rem;
   align-items: center;
-  background-color: #131324;
+  background-color: #123456;
   .container {
     height: 100vh;
     width: 100vw;

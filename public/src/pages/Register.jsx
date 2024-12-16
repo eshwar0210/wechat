@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo2.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerRoute } from "../utils/APIRoutes";
@@ -27,7 +27,7 @@ export default function Register() {
     if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/");
     }
-  }, []);
+  });
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -47,9 +47,9 @@ export default function Register() {
         toastOptions
       );
       return false;
-    } else if (password.length < 3) {
+    } else if (password.length < 6) {
       toast.error(
-        "Password should be equal or greater than 8 characters.",
+        "Password should be equal or greater than 6 characters.",
         toastOptions
       );
       return false;
@@ -91,7 +91,7 @@ export default function Register() {
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h1>chat</h1>
+            <h1>We chat</h1>
           </div>
           <input
             type="text"
@@ -136,7 +136,7 @@ flex-direction: column;
 justify-content: center;
 gap: rem;
 align-items: center;
-background-color: #131324;
+background-color: #133333;
 background-image: url(chat.jpg);
 background-repeat: no-repeat;
 background-attachment: fixed;
