@@ -1,10 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BiPowerOff } from "react-icons/bi";
 import axios from "axios";
 import { logoutRoute } from "../utils/APIRoutes";
 import "./logout.css"
-
+import LogoutIcon from '@mui/icons-material/ExitToAppTwoTone';
 export default function Logout() {
   const navigate = useNavigate();
   const handleClick =  () => {
@@ -23,10 +22,8 @@ export default function Logout() {
 
   };
   return (
-
-    
       <button className="glow-on-hover" type="button" onClick={handleClick}>
-      <BiPowerOff />
+      <LogoutIcon sx={{ fontSize: 40}} />
       </button>
     
   );
