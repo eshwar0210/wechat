@@ -20,7 +20,7 @@ export default function SetAvatar() {
     draggable: true,
     theme: "dark",
   };
-
+  // console.log(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
   useEffect(async () => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
@@ -34,9 +34,17 @@ export default function SetAvatar() {
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
 
-      const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+      const { data } = await axios.post(
+        setAvatarRoute, {
         image: avatars[selectedAvatar],
-      });
+      },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+
+      );
 
       if (data.isSet) {
         user.isAvatarImageSet = true;
@@ -79,9 +87,8 @@ export default function SetAvatar() {
             {avatars.map((avatar, index) => {
               return (
                 <div
-                  className={`avatar ${
-                    selectedAvatar === index ? "selected" : ""
-                  }`}
+                  className={`avatar ${selectedAvatar === index ? "selected" : ""
+                    }`}
                 >
                   <img
                     src={`data:image/svg+xml;base64,${avatar}`}

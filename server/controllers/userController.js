@@ -16,6 +16,7 @@ module.exports.login = async (req, res, next) => {
       return res.json({ msg: "Incorrect Username or Password", status: false });
     delete user.password;
     // console.log(user);
+    console.log(SECRET_KEY);
     const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, {
       expiresIn: '1h', 
     });
@@ -48,8 +49,9 @@ module.exports.register = async (req, res, next) => {
 };
 
 module.exports.getAllUsers = async (req, res, next) => {
+  // console.log(req.user);
   try {
-    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+    const users = await User.find({ _id: { $ne: req.user.id } }).select([
       "email",
       "username",
       "avatarImage",
@@ -62,8 +64,11 @@ module.exports.getAllUsers = async (req, res, next) => {
 };
 
 module.exports.setAvatar = async (req, res, next) => {
+  console.log(req.user);
+  
+  console.log(req.user.id);
   try {
-    const userId = req.params.id;
+    const userId = req.user.id;
     const avatarImage = req.body.image;
     const userData = await User.findByIdAndUpdate(
       userId,
@@ -83,8 +88,9 @@ module.exports.setAvatar = async (req, res, next) => {
 };
 
 module.exports.logOut = (req, res, next) => {
+  // console.log(req.user);
   try {
-    if (!req.params.id) return res.json({ msg: "User id is required " });
+    if (!req.user.id) return res.json({ msg: "User id is required " });
     onlineUsers.delete(req.params.id);
     return res.status(200).send();
   } catch (ex) {

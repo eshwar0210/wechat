@@ -75,11 +75,10 @@ export default function Register() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-        navigate("/");
+        toast.success("Registration successful!", toastOptions);
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
       }
     }
   };

@@ -34,19 +34,35 @@ export default function Chat() {
     }
   }, [currentUser]);
 
-  useEffect( () => {
-    async function fetch(){
-    if (currentUser) {
-      if (currentUser.isAvatarImageSet) {
-        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-        setContacts(data.data);
-      } else {
-        navigate("/setAvatar");
+  useEffect(() => {
+    async function fetchContacts() {
+      if (currentUser) {
+        if (currentUser.isAvatarImageSet) {
+          try {
+            const { data } = await axios.get(allUsersRoute, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+            setContacts(data);
+          } catch (error) {
+            // console.log(error.response.data.message);
+            if(error.response.data.message==="Invalid token"){
+               localStorage.removeItem("token");
+               localStorage.removeItem(process.env.REACT_APP_LOCALHOST_KEY);
+                navigate("/login");
+            }
+            console.error("Error fetching contacts:", error);
+          }
+        } else {
+          navigate("/setAvatar");
+        }
       }
     }
-  }
-  fetch();
+    fetchContacts();
   }, [currentUser]);
+  
+
   const handlechatChange = (chat) => {
     setCurrentchat(chat);
   };
